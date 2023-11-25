@@ -9,7 +9,6 @@ app.use(express.json())
 
 const { eAdmin } = require("./middlewares/auth")
 
-
 app.get('/', eAdmin, async (req, res) => {
 
    return res.json({
@@ -26,10 +25,18 @@ app.get('/', eAdmin, async (req, res) => {
 
 app.post('/signUp', async (req, res) => {
 
-    return res.json({
-        "erro": false,
-        "msg": "Cadastrar usuário"
-    })
+    if(!req.body.user || !req.body.password) {
+        return res.status(400).json({
+            "erro": true,
+            "msg": "ERRO: As informaçoes não estão corretas."
+        })
+    } else {
+        return res.json({
+            "erro": false,
+            "msg": "Cadastrar usuário"
+        })
+    }
+    
 
 })
 
@@ -53,7 +60,7 @@ app.post('/signIn', async (req, res) => {
 
     const token = jwt.sign({ id: 1 }, "ASCVB#$BCNWDFAJSASD$%FD", {
         // expiresIn: '7d' // 7 dias
-        expiresIn: 10 // 1min
+        expiresIn: 60 // 1min
     })
 
 
